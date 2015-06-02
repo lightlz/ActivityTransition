@@ -1,12 +1,19 @@
 package com.light.activitytransition;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Transition;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by light on 15/5/22.
@@ -31,12 +38,18 @@ public class DetialActivity extends Activity{
 
     private RecyclerView.Adapter adapter;
 
+    private List<ColorBean> dataSet;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.details);
 
         bean = ColorBean.getItem(getIntent().getIntExtra(COLOR_INDEX,-1));
+
+        //隐藏标题栏
+        ActionBar actionBar = getActionBar();
+        actionBar.hide();
 
         initView();
     }
@@ -53,7 +66,10 @@ public class DetialActivity extends Activity{
 
         addTransitionListener();
 
-        adapter = new MyAdapter(this);
+
+        dataSet = new ArrayList<ColorBean>();
+        adapter = new MyAdapter(this,dataSet);
+
         recyclerView.setHasFixedSize(true);
         layoutManager = new FullyLinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -62,12 +78,65 @@ public class DetialActivity extends Activity{
 
     }
 
+    /**
+    * show image & get palette
+    * */
     private void show(){
 
         mHeaderTitle.setText(bean.getColorName());
        // mHeaderImageView.setImageResource(bean.getColorRes());
-        mHeaderImageView.setImageBitmap(ImageUtil.compressPixel(this,
-                bean.getColorRes(),480,480));
+        Bitmap bitmap = ImageUtil.compressPixel(this, bean.getColorRes(), 480, 480);
+
+        if(bitmap != null ){
+            mHeaderImageView.setImageBitmap(bitmap);
+
+            Palette.generateAsync(bitmap,new Palette.PaletteAsyncListener(){
+
+                @Override
+                public void onGenerated(Palette palette) {
+
+                    //充满活力
+                    Palette.Swatch vibrantSwatch = palette.getVibrantSwatch();
+                    Palette.Swatch lightVibrantSwatch = palette.getLightVibrantSwatch();
+                    Palette.Swatch paletteDarkVibrantSwatch = palette.getDarkVibrantSwatch();
+
+                    //柔和
+                    Palette.Swatch mutedSwatch = palette.getMutedSwatch();
+                    Palette.Swatch darkMutedSwatch = palette.getDarkMutedSwatch();
+                    Palette.Swatch lightMutedSwatch = palette.getLightMutedSwatch();
+
+                    //设置状态栏和导航栏颜色
+                    if (android.os.Build.VERSION.SDK_INT >= 21) {
+                        Window window = getWindow();
+
+                        window.setStatusBarColor(darkMutedSwatch.getRgb());
+                        window.setNavigationBarColor(darkMutedSwatch.getRgb());
+                    }
+                    //获取列表数据
+
+                    ColorBean colorBean = new ColorBean("Vibrant",vibrantSwatch.getRgb());
+                    ColorBean colorBean1 = new ColorBean("Vibrant Light",lightVibrantSwatch.getRgb());
+                    ColorBean colorBean2 = new ColorBean("Vibrant Dark",paletteDarkVibrantSwatch.getRgb());
+                    ColorBean colorBean3 = new ColorBean("Muted",mutedSwatch.getRgb());
+                    ColorBean colorBean4 = new ColorBean("Muted Light",lightMutedSwatch.getRgb());
+                    ColorBean colorBean5 = new ColorBean("Muted ",darkMutedSwatch.getRgb());
+
+                    dataSet.add(colorBean);
+                    dataSet.add(colorBean1);
+                    dataSet.add(colorBean2);
+                    dataSet.add(colorBean3);
+                    dataSet.add(colorBean4);
+                    dataSet.add(colorBean5);
+
+                    adapter.notifyDataSetChanged();
+
+                }
+            });
+
+        }else{
+            mHeaderImageView.setImageResource(R.color.blue);
+        }
+
     }
 
     /**

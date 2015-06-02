@@ -21,11 +21,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     private LayoutInflater layoutInflater;
 
-    public MyAdapter(Context context) {
+    public MyAdapter(Context context,List<ColorBean> dataSet) {
         super();
 
         this.context = context;
-       // this.dataSet = dataSet;
+        this.dataSet = dataSet;
 
     }
 
@@ -54,13 +54,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        holder.tvColorName.setText("RED");
-
+        holder.tvColorName.setText(dataSet.get(position).getColorName());
+        holder.imgColor.setBackgroundColor(dataSet.get(position).getColorRes());
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return dataSet.size();
     }
 
 
