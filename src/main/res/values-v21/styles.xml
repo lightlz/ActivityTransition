@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AppTheme" parent="android:Theme.Material.Light">
+
+        <!-- Main theme colors -->
+        <!--   your app branding color for the app bar -->
+        <!--<item name="android:colorPrimary">#aabbcc</item>-->
+        <!--   darker variant for the status bar and contextual app bars -->
+        <!--<item name="android:colorPrimaryDark">#aabbcc</item>-->
+        <!--   theme UI controls like checkboxes and text fields -->
+        <!--<item name="android:colorAccent">#aabbcc</item>-->
+
     </style>
 </resources>
