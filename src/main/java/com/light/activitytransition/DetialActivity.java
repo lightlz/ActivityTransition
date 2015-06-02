@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +27,8 @@ public class DetialActivity extends Activity{
     public static final String DETIAL_IMAGE = "detial_image";
 
     public static final String DETIAL_NAME = "detial_name";
+
+    public static final int CHANGE_COLOR = 0;
 
     private ImageView mHeaderImageView;
 
@@ -68,7 +72,7 @@ public class DetialActivity extends Activity{
 
 
         dataSet = new ArrayList<ColorBean>();
-        adapter = new MyAdapter(this,dataSet);
+        adapter = new MyAdapter(this,dataSet,handler);
 
         recyclerView.setHasFixedSize(true);
         layoutManager = new FullyLinearLayoutManager(this);
@@ -107,10 +111,7 @@ public class DetialActivity extends Activity{
 
                     //设置状态栏和导航栏颜色
                     if (android.os.Build.VERSION.SDK_INT >= 21) {
-                        Window window = getWindow();
-
-                        window.setStatusBarColor(darkMutedSwatch.getRgb());
-                        window.setNavigationBarColor(darkMutedSwatch.getRgb());
+                        changeColor(darkMutedSwatch.getRgb());
                     }
                     //获取列表数据
 
@@ -138,6 +139,23 @@ public class DetialActivity extends Activity{
         }
 
     }
+
+
+    private Handler handler = new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            int color = msg.arg1;
+
+            switch (msg.what){
+                case CHANGE_COLOR:
+                    changeColor(color);
+                    break;
+            }
+        }
+    };
 
     /**
      * TransitionListener
@@ -182,6 +200,15 @@ public class DetialActivity extends Activity{
         }
         // If we reach here then we have not added a listener
         return false;
+    }
+
+
+    private void changeColor(int color){
+
+        Window window = getWindow();
+
+        window.setStatusBarColor(color);
+        window.setNavigationBarColor(color);
     }
 
 }
