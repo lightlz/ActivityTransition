@@ -206,7 +206,6 @@ public class DetialActivity extends Activity{
     private void changeColor(int color){
 
         Window window = getWindow();
-
         window.setStatusBarColor(color);
         window.setNavigationBarColor(color);
     }

@@ -54,8 +54,6 @@ public class MainActivity extends Activity {
                 ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
                         MainActivity.this,
 
-                        // Now we provide a list of Pair items which contain the view we can transitioning
-                        // from, and the name of the view it is transitioning to, in the launched activity
                         new Pair<View, String>(view.findViewById(R.id.imageview_item),
                                 DetialActivity.DETIAL_IMAGE),
                         new Pair<View, String>(view.findViewById(R.id.textview_name),

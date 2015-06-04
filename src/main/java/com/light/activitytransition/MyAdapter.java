@@ -45,9 +45,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
             tvColorName = (TextView)itemView.findViewById(R.id.item_tv);
             imgColor = (ImageView)itemView.findViewById(R.id.item_img);
-
-
-
         }
 
     }
